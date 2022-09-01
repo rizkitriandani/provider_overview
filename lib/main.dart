@@ -35,7 +35,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menggunakan Change notifier'),
+        title: Text('Menggunakan Extension Method'),
       ),
       body: Center(
         child: Column(
@@ -43,7 +43,7 @@ class MyHomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '- name: ${Provider.of<Dog>(context).name}',
+              '- name: ${context.read<Dog>().name}',
               style: TextStyle(fontSize: 20.0),
             ),
             SizedBox(height: 10.0),
@@ -55,6 +55,7 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+
 class BreedAndAge extends StatelessWidget {
   const BreedAndAge({
     Key? key,
@@ -65,7 +66,7 @@ class BreedAndAge extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '- breed: ${Provider.of<Dog>(context).breed}',
+          '- breed: ${context.read<Dog>().breed}',
           style: TextStyle(fontSize: 20.0),
         ),
         SizedBox(height: 10.0),
@@ -77,18 +78,18 @@ class BreedAndAge extends StatelessWidget {
 
 class Age extends StatelessWidget {
   const Age({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          '- age: ${Provider.of<Dog>(context).age}',
+          '- age: ${context.select<Dog, int>((Dog dog) => dog.age)}',
           style: TextStyle(fontSize: 20.0),
         ),
         SizedBox(height: 20.0),
         ElevatedButton(
-          onPressed: () => Provider.of<Dog>(context, listen: false).grow(),
+          onPressed: () => context.read<Dog>().grow(),
           child: Text(
             'Grow',
             style: TextStyle(fontSize: 20.0),
