@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'models/dog.dart';
+import 'models/baby.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,8 +13,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Dog(name: 'Kevin', breed: 'Manusia Anjing'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Dog>(
+          create: (context) => Dog(name: 'Kevin', breed: 'Herder', age: 4),
+        ),
+        FutureProvider<int>(
+            create: (context) {
+              final int dogAge = context.read<Dog>().age;
+              final babies = Babies(age: dogAge);
+              return babies.getBabies();
+            },
+            initialData: 0),
+        FutureProvider<bool>(
+          initialData: false,
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge);
+            return babies.getEqual(babies.age == context.read<Dog>().age);
+          },
+        ),
+      ],
       child: MaterialApp(
         title: 'Menggunakan Change Notifier',
         debugShowCheckedModeBanner: false,
@@ -47,6 +67,16 @@ class MyHomePage extends StatelessWidget {
               style: TextStyle(fontSize: 20.0),
             ),
             SizedBox(height: 10.0),
+            Text(
+              '- number of babies: ${context.watch<int>()}',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              '- seumuran ? ${context.watch<bool>()}',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(height: 10.0),
             BreedAndAge(),
           ],
         ),
@@ -54,7 +84,6 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
 
 class BreedAndAge extends StatelessWidget {
   const BreedAndAge({
@@ -78,7 +107,7 @@ class BreedAndAge extends StatelessWidget {
 
 class Age extends StatelessWidget {
   const Age({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
