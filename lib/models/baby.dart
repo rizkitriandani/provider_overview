@@ -1,7 +1,7 @@
 class Babies {
   final int age;
   final bool isEqual;
-  Babies({required this.age, this.isEqual=false});
+  Babies({required this.age, this.isEqual = false});
 
   Future<int> getBabies() async {
     await Future.delayed(Duration(seconds: 3));
@@ -22,6 +22,13 @@ class Babies {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Stream<String> bark() async* {
+    for (int i = 0; i <= age; i++) {
+      await Future.delayed(Duration(seconds: 2));
+      yield 'bark $i times';
     }
   }
 }

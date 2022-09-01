@@ -33,6 +33,14 @@ class MyApp extends StatelessWidget {
             return babies.getEqual(babies.age == context.read<Dog>().age);
           },
         ),
+         StreamProvider<String>(
+          initialData: 'Bark 0',
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge * 2);
+            return babies.bark();
+          },
+        )
       ],
       child: MaterialApp(
         title: 'Menggunakan Change Notifier',
@@ -74,6 +82,11 @@ class MyHomePage extends StatelessWidget {
             SizedBox(height: 10.0),
             Text(
               '- seumuran ? ${context.watch<bool>()}',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              '- Bark ? ${context.watch<String>()}',
               style: TextStyle(fontSize: 20.0),
             ),
             SizedBox(height: 10.0),
